@@ -17,7 +17,10 @@ apt install -qqy --no-install-recommends \
     dnsmasq \
     hostapd \
     iptables \
+    iproute2 \
     libconfig11 \
+    libqmi-utils \
+    libmbim-utils \
     locales \
     modemmanager \
     netcat-traditional \
@@ -29,12 +32,18 @@ apt install -qqy --no-install-recommends \
     sudo \
     systemd-timesyncd \
     tzdata \
+    usb-modeswitch \
     wireguard-tools \
     wpasupplicant
 apt clean
 rm -rf /var/lib/apt/lists/*
 
+# dnsmasq vorerst deaktivieren, um Konflikte mit NetworkManager zu vermeiden
+systemctl disable dnsmasq || true
+
 passwd -d root
 
 echo user:1::::/home/user:/bin/bash | newusers
+mkhomedir_helper user || mkdir -p /home/user && chown -R 1000:1000 /home/user || true
 echo 'user ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/user
+chmod 0440 /etc/sudoers.d/user
