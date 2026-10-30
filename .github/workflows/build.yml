@@ -21,17 +21,6 @@ jobs:
       - name: Extract MSM8916 firmware
         run: sudo sh -e scripts/extract_fw.sh
 
-      - name: Update Debian Archive Keyring
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y debian-archive-keyring || true
-          mkdir -p /tmp/keyring
-          curl -fsSL -o /tmp/keyring/keyring.deb http://ftp.debian.org/debian/pool/main/d/debian-archive-keyring/debian-archive-keyring_2023.4_all.deb || \
-          curl -fsSL -o /tmp/keyring/keyring.deb http://deb.debian.org/debian/pool/main/d/debian-archive-keyring/debian-archive-keyring_2023.4_all.deb
-          if [ -f /tmp/keyring/keyring.deb ]; then
-            sudo dpkg -i --force-all /tmp/keyring/keyring.deb
-          fi
-
       - name: Create rootfs
         run: sudo sh -e scripts/debootstrap.sh
 
